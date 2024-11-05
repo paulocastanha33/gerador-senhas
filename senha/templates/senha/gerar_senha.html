@@ -1,0 +1,101 @@
+<!-- senha/templates/senha/gerar_senha.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerador de Senhas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            color: #007bff;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .generated-password {
+            font-size: 1.2em;
+            margin-top: 20px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 4px;
+            position: relative;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        function limparCampos() {
+            // Reseta os campos do formulário
+            document.getElementById('senhaForm').reset();
+            // Limpa a senha gerada da tela
+            document.getElementById('senhaGerada').innerText = '';
+        }
+
+        function copiarSenha() {
+            // Seleciona o texto da senha gerada
+            const senhaGerada = document.getElementById('senhaGerada').innerText;
+            if (senhaGerada) {
+                navigator.clipboard.writeText(senhaGerada).then(() => {
+                    alert("Senha copiada para a área de transferência!");
+                }).catch((error) => {
+                    alert("Erro ao copiar a senha: " + error);
+                });
+            } else {
+                alert("Nenhuma senha para copiar.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerador de Senhas</h1>
+        <form id="senhaForm" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Gerar Senha</button>
+        </form>
+        {% if senha_gerada %}
+        <div class="generated-password" id="senhaGerada">
+            <strong>Senha Gerada:</strong> {{ senha_gerada }}
+        </div>
+        {% endif %}
+        <div class="button-container">
+            <button type="button" onclick="limparCampos()">Limpar Campos</button>
+            <button type="button" onclick="copiarSenha()">Copiar Senha</button>
+        </div>
+    </div>
+</body>
+</html>
